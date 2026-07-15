@@ -1,6 +1,6 @@
 # Agent Skill Sync
 
-> 作者：Takis/安梓豪
+> 作者：Takis
 
 Seedance 2.0 视频分镜技能集合 — 从剧本到提示词再到面板注入的全流程自动化。
 
