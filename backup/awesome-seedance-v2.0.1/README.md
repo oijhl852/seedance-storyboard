@@ -6,7 +6,7 @@ Seedance 2.0 综合视频脚本与分镜生成技能。
 - [Seedance2-Storyboard-Generator](https://github.com/liangdabiao/Seedance2-Storyboard-Generator) — 专业分镜工作流与剧本系统
 - [songguoxs/seedance-prompt-skill](https://github.com/songguoxs/seedance-prompt-skill) — 十大能力框架与提示词工程 (MIT)
 - [ZeroLu/awesome-seedance](https://github.com/ZeroLu/awesome-seedance) — 精选案例库 (CC BY 4.0)
-- [YouMind-OpenLab/awesome-seedance-2-prompts](https://github.com/YouMind-OpenLab/awesome-seedance-2-prompts) — 3587条社区提示词 (CC BY 4.0)
+- [YouMind-OpenLab/awesome-seedance-2-prompts](https://github.com/YouMind-OpenLab/awesome-seedance-2-prompts) — 社区提示词索引 (CC BY 4.0)
 
 ## 项目结构
 
@@ -71,7 +71,7 @@ awesome-seedance/
 
 - [Seedance 官网](https://seedance.bytebase.com/)
 - [Seedance2-Storyboard-Generator](https://github.com/liangdabiao/Seedance2-Storyboard-Generator)
-- [YouMind 提示词画廊](https://youmind.com/zh-CN/seedance-2-0-prompts) — 浏览 3587 条社区提示词
+- [YouMind 提示词画廊](https://youmind.com/zh-CN/seedance-2-0-prompts) — 在线社区提示词画廊
 
 ## 许可
 

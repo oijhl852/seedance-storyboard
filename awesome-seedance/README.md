@@ -1,18 +1,18 @@
 # awesome-seedance
 
-Seedance 2.0 综合视频脚本与分镜生成技能。
+Seedance 2.0 综合视频脚本与分镜生成主 skill。具体能力由仓库根目录的 `sd-*` 子 skill 提供。
 
 融合四套知识体系：
 - [Seedance2-Storyboard-Generator](https://github.com/liangdabiao/Seedance2-Storyboard-Generator) — 专业分镜工作流与剧本系统
 - [songguoxs/seedance-prompt-skill](https://github.com/songguoxs/seedance-prompt-skill) — 十大能力框架与提示词工程 (MIT)
 - [ZeroLu/awesome-seedance](https://github.com/ZeroLu/awesome-seedance) — 精选案例库 (CC BY 4.0)
-- [YouMind-OpenLab/awesome-seedance-2-prompts](https://github.com/YouMind-OpenLab/awesome-seedance-2-prompts) — 3587条社区提示词 (CC BY 4.0)
+- [YouMind-OpenLab/awesome-seedance-2-prompts](https://github.com/YouMind-OpenLab/awesome-seedance-2-prompts) — 社区提示词索引 (CC BY 4.0)
 
 ## 项目结构
 
 ```
 awesome-seedance/
-├── SKILL.md                    ← 主工作流：故事→脚本→分镜 5步骤（入口文件）
+├── SKILL.md                    ← 主编排入口：按输入类型调度子 skill
 ├── README.md                   ← 本文件
 ├── references/                 ← 详细参考文档（按需查阅）
 │   ├── seedance-manual.md             ← 16模板 + 镜头词汇库 + @引用语法
@@ -30,19 +30,19 @@ awesome-seedance/
 
 ## 快速开始
 
-### 作为 WorkBuddy Skill 使用
+### 作为 Skill 使用
 
-该 skill 已安装在 `~/.workbuddy/skills/awesome-seedance/`。在 WorkBuddy 对话中通过以下方式触发：
+安装主 skill 和需要的 `sd-*` 子 skill 后，在支持 skill 的对话环境中调用：
 
-- `@skill:awesome-seedance` — 手动调用
+- `awesome-seedance` — 手动调用主编排入口
 - 提供剧本/小说/场景描述 — 自动触发（当任务涉及 Seedance 视频生成时）
 
 ### 两种使用路径
 
 **路径 A：有故事/剧本 → 走完整分镜流程**
 
-提供小说、剧本或大纲，skill 会：
-1. 分析输入 → 2. 确认参数 → 3. 生成剧本 → 4. 出素材清单 → 5. 出分镜提示词
+提供小说、剧本或大纲，主 skill 会按需加载：
+1. 读取剧本 → 2. 拆分片段 → 3. 按戏型生成分镜 → 4. 组装提示词 → 5. 质量检查
 
 **路径 B：单个镜头/场景 → 直接出提示词**
 
@@ -71,7 +71,7 @@ awesome-seedance/
 
 - [Seedance 官网](https://seedance.bytebase.com/)
 - [Seedance2-Storyboard-Generator](https://github.com/liangdabiao/Seedance2-Storyboard-Generator)
-- [YouMind 提示词画廊](https://youmind.com/zh-CN/seedance-2-0-prompts) — 浏览 3587 条社区提示词
+- [YouMind 提示词画廊](https://youmind.com/zh-CN/seedance-2-0-prompts) — 在线社区提示词画廊
 
 ## 许可
 

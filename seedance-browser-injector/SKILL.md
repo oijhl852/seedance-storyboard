@@ -1,18 +1,17 @@
 ---
 name: seedance-browser-injector
-version: "2.0.0"
-last_updated: "2026-07-01"
+version: "2.0.1"
+last_updated: "2026-07-15"
 description: >
-  Seedance 2.0 网页面板自动化工具。结合 awesome-seedance 提示词生成
-  与 Chrome DevTools MCP 浏览器注入。当用户需要从剧本生成 Seedance
-  视频提示词、拆分为 15s 片段、并直接注入到 Seedance 网页面板编辑器
-  （带 chip 和资产引用）时触发。
-  触发关键词：Seedance panel, 注入提示词, 填入工作面板, 片段注入, 分镜注入,
-  browser seedance, chrome seedance injection.
+  [已废弃] 旧版浏览器注入说明，仅供迁移参考。请改用 awesome-seedance
+  主 skill 以及 sd-panel、sd-chip、sd-inject 三个子 skill。此入口不应自动触发。
 agent_created: true
 ---
 
-# Seedance 浏览器注入器
+# Seedance 浏览器注入器（已废弃）
+
+> 本文件保留用于迁移旧配置，不再作为自动入口。新流程请使用
+> `awesome-seedance → sd-panel → sd-chip → sd-inject`。
 
 自动化工作流：剧本 → 提示词生成 → 浏览器注入到 Seedance 网页面板。
 
@@ -214,17 +213,18 @@ const partNo = new URL(window.location.href).searchParams.get('part_no');
 
 **🔴 致命：绝不删除片段。** 调用 `segment/del` 会永久销毁片段记录，并切断该片段已生成视频文件的链接。用户已生成的视频无法恢复。
 
-**唯一安全的操作：**
-- `POST segment/update`——修改已有片段的内容
-- 在 UI 中点击"+"——追加一个新的空片段
-- **绝不**调用 `segment/del`，除非用户明确要求
+**唯一安全的默认操作：**
+- 在 UI 中点击"+"——建立一个新的空白片段
+- 确认新片段为空后，再用 `POST segment/update` 写入内容
+- **绝不**调用 `segment/del`
+- 已有片段只有在用户明确要求覆盖、展示差异并再次确认后才能更新
 - **绝不**用"先删后建"的方式重排片段顺序
 
 #### 4.1 获取片段列表（拿 ID）
 
 ```javascript
-const ticket = 'd48cf42cff39f96f313e6f784d9e12b2'; // 从 URL 参数
-const userId = '17512815021488966';                // 从 URL 参数
+const ticket = localStorage.getItem('ticket_production')?.replace(/"/g, '');
+const userId = JSON.parse(localStorage.getItem('user') || '{}')?.info?.userid;
 const resp = await fetch(
   `https://service.fujunhn.cn/api/v1/aigc/segment/list?ticket=${ticket}&user_id=${userId}&project_id=${projectId}&part_no=${partNo}&_t=${Date.now()}`
 );
@@ -309,8 +309,9 @@ const result = await resp.json();
 ```javascript
 async function injectSegment(segmentId, projectId, partNo, contentHtml) {
   const params = new URLSearchParams(window.location.search);
-  const ticket = params.get('ticket') || 'd48cf42cff39f96f313e6f784d9e12b2';
-  const userId = params.get('user_id') || '17512815021488966';
+  const ticket = localStorage.getItem('ticket_production')?.replace(/"/g, '');
+  const userId = JSON.parse(localStorage.getItem('user') || '{}')?.info?.userid;
+  if (!ticket || !userId) throw new Error('缺少面板凭证，停止注入。');
   const resp = await fetch(
     `https://service.fujunhn.cn/api/v1/aigc/segment/update?ticket=${ticket}&user_id=${userId}&_t=${Date.now()}`,
     {
@@ -344,7 +345,7 @@ async function injectSegment(segmentId, projectId, partNo, contentHtml) {
 |----------|------|---------|
 | `invalid asset uri` | data-id 用了占位符 `role:0` | 先从原生 chip 提取真实 ID |
 | 切换 tab 后内容丢失 | DOM 注入（innerHTML/execCommand）不持久——Vue 从 API 数据重新渲染 | 改用 `POST segment/update`；之后 reload 页面 |
-| 删除片段导致已生成视频丢失 | 调用了 `segment/del`——不可逆地销毁片段并切断视频链接，无法恢复 | **绝不删除。** 只 UPDATE 已有片段或通过"+"追加新段。任何删除操作必须问用户。 |
+| 删除片段导致已生成视频丢失 | 调用了 `segment/del`——不可逆地销毁片段并切断视频链接，无法恢复 | **绝不删除。** 默认通过"+"建立空白片段后写入。已有片段只有在用户明确确认后才能覆盖。 |
 | 切回片段后 chip 消失 | innerHTML 改动被 Vue 从 `segment/list` 重新加载时丢弃 | 通过 API 注入，不操作 DOM |
 | execCommand 注入的 chip 不被平台识别 | 平台资产绑定只在手动 `@` 时触发，DOM 注入不会触发 | 删除注入的 chip，手动 `@` 同名资产，再通过 API 重新注入 |
 | 编辑器显示纯文字 chip | chip 没有注册到 Vue 数据模型 | 用户需先手动 `@` 原生 chip 获取真实 ID，再通过 API 注入 |
@@ -393,17 +394,5 @@ async function injectSegment(segmentId, projectId, partNo, contentHtml) {
 
 **仓库地址**：`https://github.com/oijhl852/agent-skill-sync`
 
-**自动检查规则**：每次本 skill 被调用时，agent 应：
-1. `web_fetch` 读取 `https://raw.githubusercontent.com/oijhl852/agent-skill-sync/main/seedance-browser-injector/SKILL.md` 的 frontmatter
-2. 对比 `version` 和 `last_updated` 字段
-3. 如果仓库版更新 → 提醒用户拉取；如果本地版更新 → 提醒用户推送
-
-**修改后推送规则**：对本 skill 做了优化或新增内容后，agent 应：
-1. 递增 `version` 补丁号（如 2.0.0 → 2.0.1），更新 `last_updated` 为当天日期
-2. 复制到工作区：`copy "C:\Users\User\.reasonix\skills\seedance-browser-injector\SKILL.md" "F:\AI分镜\"`
-3. 提醒用户在 `F:\AI分镜\agent-skill-sync` 仓库中执行：
-   ```
-   git add seedance-browser-injector/SKILL.md
-   git commit -m "v2.0.1: [改动摘要]"
-   git push
-   ```
+本文件已废弃，仅供历史迁移参考。不要根据本节执行联网检查、复制文件、提交或推送。
+新流程的版本和更新规则以 `awesome-seedance/SKILL.md` 为准。

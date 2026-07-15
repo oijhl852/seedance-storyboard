@@ -1,9 +1,9 @@
 ---
 name: sd-prompt
-version: "1.0.0"
+version: "1.2.0"
 last_updated: "2026-07-15"
 author: "Takis/安梓豪"
-description: Seedance 提示词组装 — 11标签结构化格式/时间轴格式，16种模板。由 awesome-seedance 主 skill 调用。
+description: Seedance 提示词组装 — 11个技术标签 + 角色资产引用，支持结构化格式/时间轴格式和16种模板。由 awesome-seedance 主 skill 调用。
 repository: https://github.com/oijhl852/agent-skill-sync
 ---
 
@@ -12,6 +12,20 @@ repository: https://github.com/oijhl852/agent-skill-sync
 > 作者：Takis/安梓豪 | 仓库：[agent-skill-sync](https://github.com/oijhl852/agent-skill-sync)
 
 将分镜结果组装为可直接在 Seedance 2.0 使用的提示词。
+
+## 格式选择
+
+| 输入特点 | 优先格式 |
+|---|---|
+| 单镜头、重画面质感、资产引用多 | 结构化标签式 |
+| 15秒完整叙事、对白或动作节拍明显 | 时间轴式 |
+| 用户已有提示词，只要求优化 | 保留原格式，只修复缺项 |
+
+缺少关键输入时标记 `[待确认]`，不要自行编造角色、地点、台词或资产 ID。
+
+生成每个分段前，先继承所属场景的基础提示词锁定表。固定内容不重复改写；只有剧本明确出现日出日落、延时摄影、天气变化或其他视觉变化时，才在时间轴中用自然语言描述变化。
+
+最终提示词禁止用 `→`、`=>` 或类似符号表示状态变化。改用“随后”“紧接着”“画面逐渐转为”“人物先……然后……”等完整句子。
 
 ## 结构化标签式
 
@@ -29,7 +43,7 @@ repository: https://github.com/oijhl852/agent-skill-sync
 【运镜】[具体运镜]
 【构图】[构图规则]
 【表演】[动作要求]
-【角色】[角色chips]
+【角色资产】[角色/场景/道具 chips]
 ```
 
 ## 时间轴式
@@ -71,6 +85,13 @@ repository: https://github.com/oijhl852/agent-skill-sync
 | 视频延长类 | 续接已有视频 |
 | 视频编辑类 | 修改已有视频 |
 | 剧情颠覆类 | 反转已有剧情 |
+
+## 标准输出格式
+
+1. `格式判断`：选择结构化标签式或时间轴式，以及原因。
+2. `提示词正文`：可直接复制到 Seedance。
+3. `资产引用表`：每个 chip 的名称、类型、用途和验证状态。
+4. `待确认项`：会影响生成结果但用户尚未确认的内容。
 
 ## 🔄 更新
 

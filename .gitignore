@@ -1,0 +1,22 @@
+# Source repositories cloned locally for corpus regeneration.
+/Seedance2-Storyboard-Generator/
+/seedance-prompt-skill/
+/awesome-seedance-2-prompts/
+/seedance-2-0-prompts-*.csv
+
+# ZeroLu/awesome-seedance was cloned into the existing skill directory.
+/awesome-seedance/.git/
+/awesome-seedance/.github/
+/awesome-seedance/assets/
+/awesome-seedance/prompts/
+/awesome-seedance/scripts/
+/awesome-seedance/videos/
+/awesome-seedance/LICENSE
+/awesome-seedance/README-de.md
+/awesome-seedance/README-es.md
+/awesome-seedance/README-fr.md
+/awesome-seedance/README-ja.md
+/awesome-seedance/README-zh.md
+
+# Raw upstream skill retained locally for comparison, not loaded as instructions.
+/sd-prompt-library/references/songguoxs-seedance-prompt-skill.md

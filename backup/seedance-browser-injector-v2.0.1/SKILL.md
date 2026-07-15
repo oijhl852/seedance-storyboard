@@ -223,8 +223,8 @@ const partNo = new URL(window.location.href).searchParams.get('part_no');
 #### 4.1 获取片段列表（拿 ID）
 
 ```javascript
-const ticket = 'd48cf42cff39f96f313e6f784d9e12b2'; // 从 URL 参数
-const userId = '17512815021488966';                // 从 URL 参数
+const ticket = localStorage.getItem('ticket_production')?.replace(/"/g, '');
+const userId = JSON.parse(localStorage.getItem('user') || '{}')?.info?.userid;
 const resp = await fetch(
   `https://service.fujunhn.cn/api/v1/aigc/segment/list?ticket=${ticket}&user_id=${userId}&project_id=${projectId}&part_no=${partNo}&_t=${Date.now()}`
 );
@@ -309,8 +309,9 @@ const result = await resp.json();
 ```javascript
 async function injectSegment(segmentId, projectId, partNo, contentHtml) {
   const params = new URLSearchParams(window.location.search);
-  const ticket = params.get('ticket') || 'd48cf42cff39f96f313e6f784d9e12b2';
-  const userId = params.get('user_id') || '17512815021488966';
+  const ticket = localStorage.getItem('ticket_production')?.replace(/"/g, '');
+  const userId = JSON.parse(localStorage.getItem('user') || '{}')?.info?.userid;
+  if (!ticket || !userId) throw new Error('缺少面板凭证，停止注入。');
   const resp = await fetch(
     `https://service.fujunhn.cn/api/v1/aigc/segment/update?ticket=${ticket}&user_id=${userId}&_t=${Date.now()}`,
     {
@@ -393,17 +394,5 @@ async function injectSegment(segmentId, projectId, partNo, contentHtml) {
 
 **仓库地址**：`https://github.com/oijhl852/agent-skill-sync`
 
-**自动检查规则**：每次本 skill 被调用时，agent 应：
-1. `web_fetch` 读取 `https://raw.githubusercontent.com/oijhl852/agent-skill-sync/main/seedance-browser-injector/SKILL.md` 的 frontmatter
-2. 对比 `version` 和 `last_updated` 字段
-3. 如果仓库版更新 → 提醒用户拉取；如果本地版更新 → 提醒用户推送
-
-**修改后推送规则**：对本 skill 做了优化或新增内容后，agent 应：
-1. 递增 `version` 补丁号（如 2.0.0 → 2.0.1），更新 `last_updated` 为当天日期
-2. 复制到工作区：`copy "C:\Users\User\.reasonix\skills\seedance-browser-injector\SKILL.md" "F:\AI分镜\"`
-3. 提醒用户在 `F:\AI分镜\agent-skill-sync` 仓库中执行：
-   ```
-   git add seedance-browser-injector/SKILL.md
-   git commit -m "v2.0.1: [改动摘要]"
-   git push
-   ```
+本文件已废弃，仅供历史迁移参考。不要根据本节执行联网检查、复制文件、提交或推送。
+新流程的版本和更新规则以 `awesome-seedance/SKILL.md` 为准。
