@@ -9,7 +9,7 @@
 /awesome-seedance/.github/
 /awesome-seedance/assets/
 /awesome-seedance/prompts/
-/awesome-seedance/scripts/
+/awesome-seedance/scripts/update_last_updated.sh
 /awesome-seedance/videos/
 /awesome-seedance/LICENSE
 /awesome-seedance/README-de.md
@@ -19,4 +19,4 @@
 /awesome-seedance/README-zh.md
 
 # Raw upstream skill retained locally for comparison, not loaded as instructions.
-/sd-prompt-library/references/songguoxs-seedance-prompt-skill.md
+/awesome-seedance/references/subskills/sd-prompt-library/references/songguoxs-seedance-prompt-skill.md

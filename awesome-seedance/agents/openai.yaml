@@ -1,0 +1,7 @@
+interface:
+  display_name: "Awesome Seedance"
+  short_description: "将剧本转换为 Seedance 分段分镜提示词与面板内容"
+  default_prompt: "Use $awesome-seedance to convert this script into faithful, segmented Seedance prompts."
+
+policy:
+  allow_implicit_invocation: true

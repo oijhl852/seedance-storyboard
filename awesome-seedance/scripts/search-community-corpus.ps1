@@ -6,7 +6,7 @@ param(
     [ValidateSet('markdown', 'json')]
     [string]$Format = 'markdown',
     [switch]$FullContent,
-    [string]$Corpus = (Join-Path (Split-Path -Parent $PSScriptRoot) 'sd-community\corpus\community-prompts-4776.csv')
+    [string]$Corpus = (Join-Path $PSScriptRoot '..\references\subskills\sd-community\corpus\community-prompts-4776.csv')
 )
 
 $ErrorActionPreference = 'Stop'

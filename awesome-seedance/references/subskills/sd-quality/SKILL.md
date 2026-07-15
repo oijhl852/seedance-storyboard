@@ -44,7 +44,7 @@ repository: https://github.com/oijhl852/agent-skill-sync
 
 ### 社区语料引用
 - [ ] 记录参考的社区提示词编号和来源链接
-- [ ] 使用 `sd-community/corpus/quality-rubric.md` 给参考案例评分
+- [ ] 使用 `references/subskills/sd-community/corpus/quality-rubric.md` 给参考案例评分
 - [ ] 低于13分的案例只作为反例，不复制其结构
 - [ ] 最终提示词没有照抄无关角色、品牌、剧情或作者风格
 - [ ] 最终提示词没有使用箭头或符号表达状态变化

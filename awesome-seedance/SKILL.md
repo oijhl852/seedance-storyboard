@@ -1,10 +1,11 @@
 ---
 name: awesome-seedance
-version: "2.3.0"
-last_updated: "2026-07-15"
-author: "Takis/安梓豪"
-description: Seedance 2.0 综合视频分镜技能 — 从剧本到提示词再到面板注入的全流程编排。覆盖剧本读取、15秒拆段、对话/动作分镜、故事改编、资产构建、提示词生成与注入面板。
-repository: https://github.com/oijhl852/agent-skill-sync
+description: Use when converting a Seedance script, dialogue scene, storyboard, story outline, or shot list into segmented prompts, or when coordinating prompt generation and panel injection.
+metadata:
+  version: "2.4.0"
+  last_updated: "2026-07-15"
+  author: "Takis/安梓豪"
+  repository: "https://github.com/oijhl852/agent-skill-sync"
 ---
 
 # Awesome Seedance — 主编排层
@@ -65,8 +66,9 @@ repository: https://github.com/oijhl852/agent-skill-sync
 
 ## 子 skill 调用协议
 
-子 skill 不是自动注入的函数。主 skill 在执行每一步前，必须先读取对应目录下的
-`SKILL.md`，再把上一步的结果作为下一步输入。不要只根据上面的名称猜测规则。
+子 skill 不是独立安装的 skill，而是本包内按需读取的模块。主 skill 在执行每一步前，
+必须先读取 `references/subskills/<子 skill 名称>/SKILL.md`，再把上一步的结果作为下一步输入。
+不要只根据上面的名称猜测规则。
 
 - 输入：用户原文，以及上一步产出的结构化结果。
 - 输出：Markdown 结果，保留角色、场景、台词、动作、时间轴和未解决问题。

@@ -1,6 +1,6 @@
 param(
-    [string]$Source = (Join-Path (Split-Path -Parent $PSScriptRoot) 'awesome-seedance-2-prompts\README_zh.md'),
-    [string]$Output = (Join-Path (Split-Path -Parent $PSScriptRoot) 'sd-community\corpus'),
+    [string]$Source = (Join-Path (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)) 'awesome-seedance-2-prompts\README_zh.md'),
+    [string]$Output = (Join-Path $PSScriptRoot '..\references\subskills\sd-community\corpus'),
     [int]$ChunkSize = 20
 )
 

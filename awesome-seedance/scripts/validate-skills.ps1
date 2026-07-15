@@ -1,5 +1,5 @@
 param(
-    [string]$Root = (Split-Path -Parent $PSScriptRoot)
+    [string]$PackageRoot = (Split-Path -Parent $PSScriptRoot)
 )
 
 $ErrorActionPreference = 'Stop'
@@ -9,28 +9,40 @@ $expectedChildren = @(
     'sd-story-adapt', 'sd-asset-guide', 'sd-prompt', 'sd-prompt-library',
     'sd-community', 'sd-quality', 'sd-panel', 'sd-chip', 'sd-inject'
 )
+$subskillRoot = Join-Path $PackageRoot 'references\subskills'
 
 foreach ($name in $expectedChildren) {
-    $path = Join-Path $Root "$name\SKILL.md"
+    $path = Join-Path $subskillRoot "$name\SKILL.md"
     if (-not (Test-Path -LiteralPath $path)) {
         $errors.Add("Missing child skill: $name")
     }
 }
 
-$skillFiles = Get-ChildItem -Path $Root -Recurse -Filter 'SKILL.md' -File |
-    Where-Object {
-        $_.FullName -notmatch '\\backup\\' -and
-        $_.FullName -notmatch '\\Seedance2-Storyboard-Generator\\' -and
-        $_.FullName -notmatch '\\seedance-prompt-skill\\' -and
-        $_.FullName -notmatch '\\awesome-seedance-2-prompts\\'
-    }
+$skillFiles = @(Get-ChildItem -Path $PackageRoot -Recurse -Filter 'SKILL.md' -File)
 $names = @{}
+
+if ($skillFiles.Count -ne ($expectedChildren.Count + 1)) {
+    $errors.Add("Unexpected SKILL.md count: $($skillFiles.Count)")
+}
+
+$repositoryRoot = Split-Path -Parent $PackageRoot
+if (Test-Path -LiteralPath (Join-Path $repositoryRoot '.git')) {
+    foreach ($obsolete in @('backup', 'seedance-browser-injector') + $expectedChildren) {
+        if (Test-Path -LiteralPath (Join-Path $repositoryRoot $obsolete)) {
+            $errors.Add("Obsolete top-level path remains: $obsolete")
+        }
+    }
+}
+
+if (Test-Path -LiteralPath (Join-Path $PackageRoot 'docs')) {
+    $errors.Add('Obsolete docs directory remains inside the package.')
+}
 
 foreach ($file in $skillFiles) {
     $text = Get-Content -LiteralPath $file.FullName -Raw
     $nameMatch = [regex]::Match($text, '(?m)^name:\s*["'']?([^"''\r\n]+)')
-    $versionMatch = [regex]::Match($text, '(?m)^version:\s*["'']?([^"''\r\n]+)')
-    $dateMatch = [regex]::Match($text, '(?m)^last_updated:\s*["'']?([^"''\r\n]+)')
+    $versionMatch = [regex]::Match($text, '(?m)^\s*version:\s*["'']?([^"''\r\n]+)')
+    $dateMatch = [regex]::Match($text, '(?m)^\s*last_updated:\s*["'']?([^"''\r\n]+)')
 
     if (-not $nameMatch.Success) { $errors.Add("Missing name: $($file.FullName)") }
     if (-not $versionMatch.Success) { $errors.Add("Missing version: $($file.FullName)") }
@@ -56,7 +68,7 @@ foreach ($file in $skillFiles) {
     }
 }
 
-$corpusRoot = Join-Path $Root 'sd-community\corpus'
+$corpusRoot = Join-Path $subskillRoot 'sd-community\corpus'
 foreach ($required in @('index.md', 'quality-rubric.md', 'SOURCES.md')) {
     if (-not (Test-Path -LiteralPath (Join-Path $corpusRoot $required))) {
         $errors.Add("Missing community corpus file: $required")
@@ -84,4 +96,4 @@ if ($errors.Count -gt 0) {
     exit 1
 }
 
-Write-Output "Skill validation passed: $($skillFiles.Count) active SKILL.md files checked."
+Write-Output "Skill validation passed: 1 package and $($expectedChildren.Count) subskill modules checked."
